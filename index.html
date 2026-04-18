@@ -91,7 +91,7 @@
             <input id="kwhPerKwPerMonth" type="number" min="0" step="1" value="120">
           </div>
           <div class="field">
-            <label for="evExtra">โหลด EV/โหลดกลางวันที่เพิ่มขึ้น (kWh/เดือน)</label>
+            <label for="evExtra">ชาร์จรถ EV/โหลดกลางวันที่เพิ่มขึ้น (kWh/เดือน)</label>
             <input id="evExtra" type="number" min="0" step="1" value="0">
             <div class="hint">ระบบจะถือว่าโหลดส่วนนี้ถูกย้ายมาใช้ไฟโซลาร์กลางวัน จึงช่วยลดการซื้อไฟจากการไฟฟ้าเพิ่มขึ้น</div>
           </div>
@@ -184,7 +184,7 @@
       $('netCost').textContent = baht(res.netCost);
       $('monthlySaving').textContent = baht(res.monthlySaving);
       $('payback').textContent = years(res.paybackYears);
-      $('explainText').textContent = `ระบบ ${res.size} kW ผลิตไฟประมาณ ${nf0.format(res.monthlyProduction)} kWh/เดือน ใช้เองได้ประมาณ ${nf0.format(res.selfUseKwh)} kWh/เดือน โดยประเมินว่าบ้านใช้ไฟประมาณ ${nf0.format(res.monthlyKwh)} kWh/เดือน จากบิล ${baht(res.monthlyBill)} และอัตราค่าไฟเฉลี่ย ${nf2.format(res.tariffPerKwh)} บาท/หน่วย หากย้ายโหลด EV/โหลดกลางวันเพิ่ม ${nf0.format(res.shiftedDayLoad)} kWh/เดือน จะช่วยเพิ่มการใช้ไฟโซลาร์แทนไฟจากการไฟฟ้าได้ราว ${nf0.format(res.extraSolarUse)} kWh/เดือน หรือคิดเป็นประหยัดเพิ่มประมาณ ${baht(res.additionalBillReduction)} ต่อเดือน ทำให้รวมแล้วลดบิลได้ประมาณ ${nf0.format(res.coverage)}% หรือ ${baht(res.annualSavingYear1)} ต่อปีในปีแรก`;
+      $('explainText').textContent = `ระบบ ${res.size} kW ผลิตไฟประมาณ ${nf0.format(res.monthlyProduction)} kWh/เดือน ใช้เองได้ประมาณ ${nf0.format(res.selfUseKwh)} kWh/เดือน โดยประเมินว่าบ้านใช้ไฟประมาณ ${nf0.format(res.monthlyKwh)} kWh/เดือน จากบิล ${baht(res.monthlyBill)} และอัตราค่าไฟเฉลี่ย ${nf2.format(res.tariffPerKwh)} บาท/หน่วย หากย้ายชาร์จรถ EV/โหลดกลางวันเพิ่ม ${nf0.format(res.shiftedDayLoad)} kWh/เดือน จะช่วยเพิ่มการใช้ไฟโซลาร์แทนไฟจากการไฟฟ้าได้ราว ${nf0.format(res.extraSolarUse)} kWh/เดือน หรือคิดเป็นประหยัดเพิ่มประมาณ ${baht(res.additionalBillReduction)} ต่อเดือน ทำให้รวมแล้วลดบิลได้ประมาณ ${nf0.format(res.coverage)}% หรือ ${baht(res.annualSavingYear1)} ต่อปีในปีแรก`;
       $('compareBody').innerHTML = [3,5,8,10].map(size => calcForSize(size, defaultCosts[size])).map(r => `
         <tr ${r.size === selectedSize ? 'style="background: color-mix(in oklab, var(--color-primary) 8%, transparent);"' : ''}>
           <td><strong>${r.size} kW</strong></td><td>${nf0.format(r.monthlyProduction)} kWh</td><td>${nf0.format(r.selfUseKwh)} kWh</td><td>${baht(r.monthlySaving)}</td><td>${baht(r.installCost)}</td><td>${baht(r.netCost)}</td><td>${years(r.paybackYears)}</td>
