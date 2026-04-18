@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="th" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solar ROI Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root,[data-theme="light"]{--text-xs:clamp(.75rem,.7rem + .25vw,.875rem);--text-sm:clamp(.875rem,.8rem + .35vw,1rem);--text-base:clamp(1rem,.95rem + .25vw,1.125rem);--text-lg:clamp(1.125rem,1rem + .75vw,1.5rem);--text-xl:clamp(1.5rem,1.2rem + 1.25vw,2.25rem);--text-2xl:clamp(2rem,1.2rem + 2.5vw,3.5rem);--space-1:.25rem;--space-2:.5rem;--space-3:.75rem;--space-4:1rem;--space-5:1.25rem;--space-6:1.5rem;--space-8:2rem;--space-10:2.5rem;--space-12:3rem;--space-16:4rem;--color-bg:#f7f6f2;--color-surface:#f9f8f5;--color-surface-2:#fbfbf9;--color-surface-offset:#edeae5;--color-border:#d4d1ca;--color-text:#28251d;--color-text-muted:#7a7974;--color-text-inverse:#f9f8f4;--color-primary:#01696f;--color-primary-hover:#0c4e54;--color-success:#437a22;--color-warning:#964219;--color-blue:#006494;--radius-sm:.375rem;--radius-md:.5rem;--radius-lg:.75rem;--radius-xl:1rem;--radius-full:9999px;--shadow-sm:0 1px 2px oklch(0.2 0.01 80 / .06);--shadow-md:0 4px 12px oklch(0.2 0.01 80 / .08);--shadow-lg:0 12px 32px oklch(0.2 0.01 80 / .12);--transition-interactive:180ms cubic-bezier(.16,1,.3,1);--font-body:'Noto Sans Thai',sans-serif;--content-wide:1180px}
+    [data-theme="dark"]{--color-bg:#171614;--color-surface:#1c1b19;--color-surface-2:#201f1d;--color-surface-offset:#22211f;--color-border:#393836;--color-text:#cdccca;--color-text-muted:#9a9996;--color-text-inverse:#171614;--color-primary:#4f98a3;--color-primary-hover:#227f8b;--color-success:#6daa45;--color-warning:#bb653b;--color-blue:#5591c7;--shadow-sm:0 1px 2px oklch(0 0 0 / .2);--shadow-md:0 4px 12px oklch(0 0 0 / .3);--shadow-lg:0 12px 32px oklch(0 0 0 / .4)}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0} html{-webkit-text-size-adjust:none;text-size-adjust:none;scroll-behavior:smooth} body{min-height:100dvh;font-family:var(--font-body);font-size:var(--text-base);line-height:1.6;background:radial-gradient(circle at top right,color-mix(in oklab,var(--color-primary) 10%,var(--color-bg)) 0%,var(--color-bg) 40%),var(--color-bg);color:var(--color-text)} button,input,select{font:inherit;color:inherit} button{cursor:pointer;border:none;background:none} input,select{width:100%;padding:.9rem 1rem;border:1px solid color-mix(in oklab,var(--color-text) 12%,transparent);border-radius:var(--radius-md);background:var(--color-surface-2);transition:border-color var(--transition-interactive),box-shadow var(--transition-interactive),background var(--transition-interactive)} input:focus,select:focus{outline:none;border-color:var(--color-primary);box-shadow:0 0 0 4px color-mix(in oklab,var(--color-primary) 18%,transparent)} .shell{max-width:var(--content-wide);margin-inline:auto;padding:var(--space-6)} .topbar{display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);margin-bottom:var(--space-8)} .brand{display:flex;align-items:center;gap:var(--space-3)} .logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(145deg,var(--color-primary),color-mix(in oklab,var(--color-primary) 60%,var(--color-blue)));display:grid;place-items:center;color:white;box-shadow:var(--shadow-md)} .logo svg{width:24px;height:24px} .brand h1{font-size:var(--text-lg);line-height:1.2} .brand p{color:var(--color-text-muted);font-size:var(--text-sm)} .theme-toggle{min-width:44px;min-height:44px;padding:.65rem;border-radius:var(--radius-full);background:var(--color-surface);border:1px solid color-mix(in oklab,var(--color-text) 10%,transparent);box-shadow:var(--shadow-sm)} .hero{display:grid;grid-template-columns:1.2fr .8fr;gap:var(--space-6);margin-bottom:var(--space-6)} .hero-card,.panel,.result-card,.table-wrap{background:color-mix(in oklab,var(--color-surface) 92%,transparent);backdrop-filter:blur(12px);border:1px solid color-mix(in oklab,var(--color-text) 10%,transparent);border-radius:var(--radius-xl);box-shadow:var(--shadow-md)} .hero-card{padding:var(--space-8)} .hero-card h2{font-size:var(--text-2xl);line-height:1.1;max-width:13ch;margin-bottom:var(--space-4)} .hero-card p{color:var(--color-text-muted);max-width:62ch} .badge-row{display:flex;flex-wrap:wrap;gap:var(--space-3);margin-top:var(--space-5)} .badge{padding:.45rem .8rem;border-radius:var(--radius-full);background:color-mix(in oklab,var(--color-primary) 10%,var(--color-surface));color:var(--color-primary);font-size:var(--text-sm);font-weight:700} .snapshot{padding:var(--space-6);display:grid;gap:var(--space-4);align-content:start} .snapshot .mini{padding:var(--space-4);border-radius:var(--radius-lg);background:var(--color-surface-2);border:1px solid color-mix(in oklab,var(--color-text) 8%,transparent)} .mini .label{font-size:var(--text-sm);color:var(--color-text-muted)} .mini .value{font-size:var(--text-xl);font-weight:800;line-height:1.1;margin-top:.25rem} .grid{display:grid;grid-template-columns:1.08fr .92fr;gap:var(--space-6)} .panel{padding:var(--space-6)} .section-title{font-size:var(--text-lg);margin-bottom:var(--space-2)} .section-sub{color:var(--color-text-muted);font-size:var(--text-sm);margin-bottom:var(--space-5)} .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-4)} .field{display:grid;gap:.45rem} .field label{font-size:var(--text-sm);font-weight:700} .hint{font-size:var(--text-xs);color:var(--color-text-muted)} .cta-row{display:flex;gap:var(--space-3);flex-wrap:wrap;margin-top:var(--space-5)} .btn{min-height:44px;padding:.9rem 1.15rem;border-radius:var(--radius-md);font-weight:800;transition:all var(--transition-interactive)} .btn-primary{background:var(--color-primary);color:var(--color-text-inverse)} .btn-primary:hover{background:var(--color-primary-hover)} .btn-secondary{background:var(--color-surface-2);border:1px solid color-mix(in oklab,var(--color-text) 10%,transparent)} .results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-4)} .result-card{padding:var(--space-5)} .result-card .label{font-size:var(--text-sm);color:var(--color-text-muted)} .result-card .big{font-size:clamp(1.75rem,1.4rem + 1.4vw,2.6rem);line-height:1.05;font-weight:800;margin-top:.35rem} .result-card .sub{margin-top:.45rem;font-size:var(--text-sm);color:var(--color-text-muted)} .accent-success{color:var(--color-success)} .accent-primary{color:var(--color-primary)} .accent-warning{color:var(--color-warning)} .accent-blue{color:var(--color-blue)} .table-wrap{margin-top:var(--space-5);overflow:auto} table{width:100%;border-collapse:collapse} th,td{padding:.95rem 1rem;text-align:left;border-bottom:1px solid color-mix(in oklab,var(--color-text) 10%,transparent);white-space:nowrap} th{font-size:var(--text-sm);color:var(--color-text-muted);background:color-mix(in oklab,var(--color-surface-offset) 65%,transparent)} .footnote{margin-top:var(--space-5);color:var(--color-text-muted);font-size:var(--text-sm)} .pill{display:inline-flex;align-items:center;gap:.35rem;padding:.4rem .7rem;border-radius:var(--radius-full);background:color-mix(in oklab,var(--color-success) 14%,var(--color-surface));font-size:var(--text-xs);font-weight:700;color:var(--color-success)} @media (max-width:920px){.hero,.grid,.results,.form-grid{grid-template-columns:1fr}.hero-card h2{max-width:none}.shell{padding:var(--space-4)}}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo" aria-label="Solar ROI logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.5"></circle><path d="M12 2v3M12 19v3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M2 12h3M19 12h3M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12"></path></svg>
+        </div>
+        <div>
+          <h1>Solar ROI Calculator</h1>
+          <p>คำนวณความคุ้มค่าโซลาร์รูฟท็อปสำหรับบ้าน พร้อมผลของลดหย่อนภาษี</p>
+        </div>
+      </div>
+      <button class="theme-toggle" data-theme-toggle aria-label="Switch theme"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+    </header>
+
+    <section class="hero">
+      <div class="hero-card">
+        <div class="pill">คำนวณจากยอดค่าไฟได้โดยไม่ต้องกรอกหน่วย</div>
+        <h2>กรอกเฉพาะราคา ระบบจะประเมินหน่วยไฟให้อัตโนมัติ</h2>
+        <p>ระบบจะอ้างอิงอัตราค่าไฟเฉลี่ยของบ้านอยู่อาศัยตามมติ กกพ. ล่าสุด เพื่อประมาณการจำนวนหน่วยไฟจากยอดบิล และนำไปคำนวณ Solar ROI ให้ทันที</p>
+        <div class="badge-row">
+          <div class="badge">อิง 3.88 / 3.95 บาทต่อหน่วย</div>
+          <div class="badge">รองรับ 3 / 5 / 8 / 10 kW</div>
+          <div class="badge">ใส่ภาษี 0% - 35%</div>
+        </div>
+      </div>
+      <div class="snapshot">
+        <div class="mini"><div class="label">ค่าไฟเฉลี่ย</div><div class="value" id="snapBill">฿5,651</div></div>
+        <div class="mini"><div class="label">หน่วยไฟประมาณการ</div><div class="value" id="snapKwh">1,518 kWh</div></div>
+        <div class="mini"><div class="label">ฐานภาษี</div><div class="value" id="snapTax">25%</div></div>
+        <div class="mini"><div class="label">ค่าไฟอ้างอิง</div><div class="value" id="snapTariff">3.95</div></div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="panel">
+        <h3 class="section-title">ข้อมูลที่ใช้คำนวณ</h3>
+        <p class="section-sub">กรอกเฉพาะยอดค่าไฟเป็นบาท ระบบจะคำนวณหน่วยไฟเฉลี่ยให้เองโดยใช้อัตราค่าไฟบ้านอยู่อาศัยที่เลือก</p>
+        <div class="form-grid">
+          <div class="field">
+            <label for="monthlyBill">ค่าไฟเฉลี่ยต่อเดือน (บาท)</label>
+            <input id="monthlyBill" type="number" min="0" step="100" value="5651">
+            <div class="hint">ไม่ต้องกรอกหน่วย kWh แล้ว</div>
+          </div>
+          <div class="field">
+            <label for="tariffPeriod">อัตราค่าไฟเฉลี่ยอ้างอิง (บาท/หน่วย)</label>
+            <select id="tariffPeriod">
+              <option value="3.88">ม.ค. - เม.ย. 2569 : 3.88 บาท/หน่วย</option>
+              <option value="3.95" selected>พ.ค. - ส.ค. 2569 : 3.95 บาท/หน่วย</option>
+            </select>
+            <div class="hint">ค่าเฉลี่ยตามมติ กกพ. ล่าสุดสำหรับบ้านอยู่อาศัย</div>
+          </div>
+          <div class="field">
+            <label for="dayShare">สัดส่วนใช้ไฟกลางวัน (%)</label>
+            <input id="dayShare" type="number" min="0" max="100" step="1" value="40">
+            <div class="hint">ยิ่งสูง โซลาร์ on-grid ยิ่งคุ้ม</div>
+          </div>
+          <div class="field">
+            <label for="taxRate">ฐานภาษีเงินได้ (%)</label>
+            <select id="taxRate"><option>0</option><option>5</option><option>10</option><option>15</option><option>20</option><option selected>25</option><option>30</option><option>35</option></select>
+          </div>
+          <div class="field">
+            <label for="systemSize">ขนาดระบบหลักที่อยากดู (kW)</label>
+            <select id="systemSize"><option>3</option><option selected>5</option><option>8</option><option>10</option></select>
+          </div>
+          <div class="field">
+            <label for="installCost">ราคาติดตั้งจริง (บาท)</label>
+            <input id="installCost" type="number" min="0" step="1000" value="190000">
+          </div>
+          <div class="field">
+            <label for="taxDeductionCap">วงเงินลดหย่อนภาษีสูงสุด (บาท)</label>
+            <input id="taxDeductionCap" type="number" min="0" step="1000" value="200000">
+          </div>
+          <div class="field">
+            <label for="kwhPerKwPerMonth">ผลผลิตต่อ 1 kW ต่อเดือน (kWh)</label>
+            <input id="kwhPerKwPerMonth" type="number" min="0" step="1" value="120">
+          </div>
+          <div class="field">
+            <label for="evExtra">โหลด EV/โหลดกลางวันที่เพิ่มขึ้น (kWh/เดือน)</label>
+            <input id="evExtra" type="number" min="0" step="1" value="0">
+          </div>
+          <div class="field">
+            <label for="degradation">ค่าเสื่อมผลผลิตแผง (%/ปี)</label>
+            <input id="degradation" type="number" min="0" max="5" step="0.1" value="0.5">
+          </div>
+        </div>
+        <div class="cta-row">
+          <button class="btn btn-primary" id="recalcBtn">คำนวณใหม่</button>
+          <button class="btn btn-secondary" id="presetConservative">ตั้งค่าแบบ Conservative</button>
+          <button class="btn btn-secondary" id="presetOptimistic">ตั้งค่าแบบ Optimistic</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3 class="section-title">ผลลัพธ์ระบบที่เลือก</h3>
+        <p class="section-sub">เหมาะสำหรับประเมินความคุ้มเบื้องต้นก่อนขอใบเสนอราคาจริงจากผู้ติดตั้ง</p>
+        <div class="results">
+          <div class="result-card"><div class="label">ประหยัดภาษีได้</div><div class="big accent-primary" id="taxSaving">฿50,000</div><div class="sub">min(ราคาติดตั้ง, วงเงินลดหย่อน) × ฐานภาษี</div></div>
+          <div class="result-card"><div class="label">ต้นทุนสุทธิหลังภาษี</div><div class="big accent-warning" id="netCost">฿140,000</div><div class="sub">เงินลงทุนหลังหักผลประโยชน์ภาษี</div></div>
+          <div class="result-card"><div class="label">ประหยัดค่าไฟต่อเดือน</div><div class="big accent-success" id="monthlySaving">฿2,370</div><div class="sub">อิงผลผลิต, ค่าไฟเฉลี่ยต่อหน่วย, และโหลดกลางวัน</div></div>
+          <div class="result-card"><div class="label">คืนทุนโดยประมาณ</div><div class="big accent-blue" id="payback">4.9 ปี</div><div class="sub">ต้นทุนสุทธิ ÷ ประหยัดต่อปี</div></div>
+        </div>
+        <div class="footnote" id="explainText"></div>
+      </div>
+    </section>
+
+    <section class="panel" style="margin-top:var(--space-6)">
+      <h3 class="section-title">เปรียบเทียบหลายขนาดระบบ</h3>
+      <p class="section-sub">ใช้สมมติฐานเดียวกันทั้งหมด และประเมินหน่วยไฟจากยอดบิลอัตโนมัติ</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>ขนาด</th><th>ผลผลิต/เดือน</th><th>ใช้เองได้</th><th>ประหยัด/เดือน</th><th>ราคาประเมิน</th><th>ต้นทุนสุทธิ</th><th>คืนทุน</th></tr></thead>
+          <tbody id="compareBody"></tbody>
+        </table>
+      </div>
+      <div class="footnote">หมายเหตุ: แอปใช้ค่าไฟเฉลี่ย 3.88 บาท/หน่วย สำหรับงวด ม.ค.-เม.ย. 2569 และ 3.95 บาท/หน่วย สำหรับงวด พ.ค.-ส.ค. 2569 ตามประกาศมติ กกพ.; เป็นการคำนวณแบบประมาณการจากยอดบิล ไม่ใช่เครื่องคิดค่าไฟแบบละเอียดราย block ของ MEA/PEA [web:120][web:119]</div>
+    </section>
+  </div>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    const nf0 = new Intl.NumberFormat('th-TH', {maximumFractionDigits:0});
+    const nf1 = new Intl.NumberFormat('th-TH', {minimumFractionDigits:1, maximumFractionDigits:1});
+    const nf2 = new Intl.NumberFormat('th-TH', {minimumFractionDigits:2, maximumFractionDigits:2});
+    const defaultCosts = {3:135000,5:190000,8:300000,10:360000};
+    const serviceCharge = 38.22;
+    function baht(v){return '฿' + nf0.format(v)}
+    function years(v){return (isFinite(v) ? nf1.format(v) : '—') + ' ปี'}
+    function pct(v){return nf0.format(v) + '%'}
+
+    function calcForSize(size, customCost=null){
+      const monthlyBill = Number($('monthlyBill').value) || 0;
+      const tariffPerKwh = Number($('tariffPeriod').value) || 3.95;
+      const monthlyKwh = Math.max(0, (monthlyBill - serviceCharge * 1.07) / tariffPerKwh);
+      const dayShare = Math.min(100, Math.max(0, Number($('dayShare').value) || 0)) / 100;
+      const taxRate = (Number($('taxRate').value) || 0) / 100;
+      const installCost = customCost ?? (Number($('installCost').value) || 0);
+      const taxDeductionCap = Number($('taxDeductionCap').value) || 0;
+      const kwhPerKwPerMonth = Number($('kwhPerKwPerMonth').value) || 0;
+      const evExtra = Number($('evExtra').value) || 0;
+      const degradation = (Number($('degradation').value) || 0) / 100;
+      const monthlyProduction = size * kwhPerKwPerMonth;
+      const availableDayLoad = monthlyKwh * dayShare + evExtra;
+      const selfUseKwh = Math.min(monthlyProduction, availableDayLoad);
+      const monthlySaving = selfUseKwh * tariffPerKwh;
+      const annualSavingYear1 = monthlySaving * 12;
+      const annualSavingAvg5Y = annualSavingYear1 * (1 - degradation * 2);
+      const taxSaving = Math.min(installCost, taxDeductionCap) * taxRate;
+      const netCost = Math.max(0, installCost - taxSaving);
+      const paybackYears = annualSavingYear1 > 0 ? netCost / annualSavingYear1 : Infinity;
+      const coverage = monthlyBill > 0 ? (monthlySaving / monthlyBill) * 100 : 0;
+      return {size, monthlyBill, monthlyKwh, tariffPerKwh, installCost, monthlyProduction, selfUseKwh, monthlySaving, annualSavingYear1, annualSavingAvg5Y, taxSaving, netCost, paybackYears, coverage};
+    }
+
+    function render(){
+      const selectedSize = Number($('systemSize').value);
+      const customCost = Number($('installCost').value) || 0;
+      const res = calcForSize(selectedSize, customCost);
+      $('snapBill').textContent = baht(res.monthlyBill);
+      $('snapKwh').textContent = nf0.format(res.monthlyKwh) + ' kWh';
+      $('snapTax').textContent = pct(Number($('taxRate').value) || 0);
+      $('snapTariff').textContent = nf2.format(res.tariffPerKwh) + ' บ./หน่วย';
+      $('taxSaving').textContent = baht(res.taxSaving);
+      $('netCost').textContent = baht(res.netCost);
+      $('monthlySaving').textContent = baht(res.monthlySaving);
+      $('payback').textContent = years(res.paybackYears);
+      $('explainText').textContent = `ระบบ ${res.size} kW ผลิตไฟประมาณ ${nf0.format(res.monthlyProduction)} kWh/เดือน ใช้เองได้ประมาณ ${nf0.format(res.selfUseKwh)} kWh/เดือน โดยประเมินว่าบ้านใช้ไฟประมาณ ${nf0.format(res.monthlyKwh)} kWh/เดือน จากบิล ${baht(res.monthlyBill)} และอัตราค่าไฟเฉลี่ย ${nf2.format(res.tariffPerKwh)} บาท/หน่วย จึงช่วยลดบิลประมาณ ${nf0.format(res.coverage)}% หรือประมาณ ${baht(res.annualSavingYear1)} ต่อปีในปีแรก`;
+      $('compareBody').innerHTML = [3,5,8,10].map(size => calcForSize(size, defaultCosts[size])).map(r => `
+        <tr ${r.size === selectedSize ? 'style="background: color-mix(in oklab, var(--color-primary) 8%, transparent);"' : ''}>
+          <td><strong>${r.size} kW</strong></td><td>${nf0.format(r.monthlyProduction)} kWh</td><td>${nf0.format(r.selfUseKwh)} kWh</td><td>${baht(r.monthlySaving)}</td><td>${baht(r.installCost)}</td><td>${baht(r.netCost)}</td><td>${years(r.paybackYears)}</td>
+        </tr>`).join('');
+    }
+
+    $('recalcBtn').addEventListener('click', render);
+    ['monthlyBill','tariffPeriod','dayShare','taxRate','systemSize','installCost','taxDeductionCap','kwhPerKwPerMonth','evExtra','degradation'].forEach(id => $(id).addEventListener('input', render));
+    $('presetConservative').addEventListener('click',()=>{$('dayShare').value=30;$('kwhPerKwPerMonth').value=110;$('degradation').value=0.7;render();});
+    $('presetOptimistic').addEventListener('click',()=>{$('dayShare').value=50;$('kwhPerKwPerMonth').value=125;$('degradation').value=0.4;render();});
+    (function(){const t=document.querySelector('[data-theme-toggle]'),r=document.documentElement;let d=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';r.setAttribute('data-theme',d);const icon=()=>d==='dark'?'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>':'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';t.innerHTML=icon();t.addEventListener('click',()=>{d=d==='dark'?'light':'dark';r.setAttribute('data-theme',d);t.innerHTML=icon();});})();
+    render();
+  </script>
+</body>
+</html>
